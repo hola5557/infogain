@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ti dà una spiegazione</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #0B0F19; /* Slightly lighter than pure black for depth */
+        color: #f8fafc;
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      /* The 'Best in the World' Knowledge Background */
+      /* DRASTICALLY INCREASED OPACITY AND BRIGHTNESS */
+      .knowledge-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -10;
+        background: 
+          radial-gradient(circle at 15% 50%, rgba(79, 70, 229, 0.5) 0%, transparent 50%),
+          radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.5) 0%, transparent 50%),
+          radial-gradient(circle at 50% 80%, rgba(16, 185, 129, 0.4) 0%, transparent 50%),
+          radial-gradient(circle at 50% 20%, rgba(56, 189, 248, 0.45) 0%, transparent 45%);
+        background-size: 180% 180%;
+        animation: ambient-shift 20s ease-in-out infinite alternate;
+        filter: saturate(1.5); /* Boost color saturation */
+      }
+      
+      .horizon-glow {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 50vh;
+        background: linear-gradient(to top, rgba(99, 102, 241, 0.3), transparent);
+        z-index: -6;
+        pointer-events: none;
+      }
+
+      /* Floating Geometric Shapes */
+      .floating-shapes {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -5;
+        pointer-events: none;
+        overflow: hidden;
+      }
+      
+      .bg-shape {
+        position: absolute;
+        opacity: 0.6; /* Much more visible */
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.5px;
+      }
+
+      .shape-1 { 
+        top: 10%; 
+        left: 5%; 
+        width: 400px; 
+        height: 400px;
+        color: #6366f1; /* Indigo 500 */
+        animation: float-rotate 60s linear infinite; 
+      }
+      
+      .shape-2 { 
+        bottom: 10%; 
+        right: -5%; 
+        width: 500px; 
+        height: 500px;
+        color: #a855f7; /* Purple 500 */
+        animation: float-rotate-reverse 80s linear infinite; 
+      }
+      
+      .shape-3 { 
+        top: 40%; 
+        right: 20%; 
+        width: 250px; 
+        height: 250px;
+        color: #2dd4bf; /* Teal 400 */
+        animation: float 40s ease-in-out infinite; 
+      }
+
+      /* Floating Symbols Layer */
+      .floating-symbols {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -4;
+        pointer-events: none;
+        overflow: hidden;
+      }
+      
+      .symbol {
+        position: absolute;
+        color: rgba(255, 255, 255, 0.25); /* Much brighter white */
+        font-family: 'Outfit', sans-serif;
+        font-weight: 800;
+        user-select: none;
+        text-shadow: 0 0 20px rgba(255,255,255,0.2);
+      }
+
+      /* TECH DESIGN LAYER */
+      .tech-design-layer {
+        position: fixed;
+        inset: 0;
+        z-index: -3; /* Above symbols, behind particles */
+        pointer-events: none;
+      }
+
+      .tech-corner {
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        stroke: rgba(255, 255, 255, 0.6); /* Bright tech white */
+        stroke-width: 2;
+        fill: none;
+      }
+
+      .corner-tl { top: 30px; left: 30px; }
+      .corner-tr { top: 30px; right: 30px; transform: scaleX(-1); }
+      .corner-bl { bottom: 30px; left: 30px; transform: scaleY(-1); }
+      .corner-br { bottom: 30px; right: 30px; transform: scale(-1, -1); }
+
+      .tech-compass {
+        position: absolute;
+        bottom: -150px;
+        right: -150px;
+        width: 600px;
+        height: 600px;
+        opacity: 0.15;
+        animation: spin-slow 120s linear infinite;
+        color: #06b6d4; /* Cyan */
+      }
+
+      .crosshair {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0.4;
+      }
+      .crosshair::before, .crosshair::after {
+        content: '';
+        position: absolute;
+        background-color: #fff;
+      }
+      .crosshair::before { width: 100%; height: 1px; }
+      .crosshair::after { width: 1px; height: 100%; }
+
+      @keyframes float-symbol {
+          0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
+          50% { transform: translateY(-30px) rotate(10deg); opacity: 0.6; }
+      }
+      
+      @keyframes float-rotate {
+        0% { transform: translate(0, 0) rotate(0deg); }
+        50% { transform: translate(40px, 60px) rotate(180deg); }
+        100% { transform: translate(0, 0) rotate(360deg); }
+      }
+      
+      @keyframes float-rotate-reverse {
+        0% { transform: translate(0, 0) rotate(360deg); }
+        50% { transform: translate(-50px, -30px) rotate(180deg); }
+        100% { transform: translate(0, 0) rotate(0deg); }
+      }
+
+      @keyframes spin-slow {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+
+      @keyframes float {
+          0%, 100% { transform: translateY(0) scale(1); }
+          50% { transform: translateY(-60px) scale(1.1); }
+      }
+
+      #particle-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -2; /* Behind content, on top of shapes */
+        pointer-events: none;
+      }
+
+      .grid-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -3; /* Behind particles */
+        background-image: 
+          linear-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+        background-size: 50px 50px;
+        mask-image: radial-gradient(circle at center, black 40%, transparent 90%);
+      }
+      
+      .noise-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        opacity: 0.07;
+        pointer-events: none;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      }
+
+      @keyframes ambient-shift {
+        0% { background-position: 0% 50%; }
+        33% { background-position: 100% 20%; }
+        66% { background-position: 20% 90%; }
+        100% { background-position: 80% 50%; }
+      }
+
+      h1, h2, h3, h4, h5, h6 {
+        font-family: 'Outfit', sans-serif;
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0f172a;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #334155;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #475569;
+      }
+
+      /* Glassmorphism Utilities */
+      .glass-panel {
+        background: rgba(30, 41, 59, 0.6);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
+    "recharts": "https://aistudiocdn.com/recharts@^3.4.1",
+    "clsx": "https://aistudiocdn.com/clsx@^2.1.1",
+    "d3": "https://aistudiocdn.com/d3@^7.9.0"
+  }
+}
+</script>
+</head>
+  <body>
+    <div class="knowledge-bg"></div>
+    <div class="horizon-glow"></div>
+    
+    <!-- Floating Shapes Layer -->
+    <div class="floating-shapes">
+        <!-- Geometric Polyhedron -->
+        <svg class="bg-shape shape-1" viewBox="0 0 200 200">
+             <path stroke-width="2" d="M100 10 L190 60 L190 160 L100 210 L10 160 L10 60 Z M100 10 L100 210 M10 60 L190 60 M10 160 L190 160 M100 110 L190 60 M100 110 L10 60 M100 110 L100 210" />
+        </svg>
+        
+        <!-- Orbital Rings -->
+        <svg class="bg-shape shape-2" viewBox="0 0 300 300">
+            <ellipse cx="150" cy="150" rx="140" ry="40" stroke-width="2" transform="rotate(45 150 150)"/>
+            <ellipse cx="150" cy="150" rx="140" ry="40" stroke-width="2" transform="rotate(-45 150 150)"/>
+            <ellipse cx="150" cy="150" rx="140" ry="40" stroke-width="2" transform="rotate(90 150 150)"/>
+            <circle cx="150" cy="150" r="15" fill="currentColor" opacity="0.8"/>
+        </svg>
+        
+        <!-- Abstract Grid Block -->
+        <svg class="bg-shape shape-3" viewBox="0 0 200 200">
+            <defs>
+                <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                    <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" stroke-width="2"/>
+                </pattern>
+            </defs>
+            <rect width="200" height="200" fill="url(#grid)" opacity="0.8" transform="rotate(15 100 100)" />
+        </svg>
+    </div>
+
+    <!-- Floating Symbols Layer -->
+    <div class="floating-symbols">
+        <span class="symbol" style="top: 15%; left: 10%; font-size: 5rem; animation: float-symbol 12s infinite ease-in-out;">∫</span>
+        <span class="symbol" style="top: 75%; left: 15%; font-size: 7rem; animation: float-symbol 18s infinite ease-in-out 2s;">π</span>
+        <span class="symbol" style="top: 20%; right: 10%; font-size: 6rem; animation: float-symbol 15s infinite ease-in-out 1s;">∑</span>
+        <span class="symbol" style="top: 60%; right: 20%; font-size: 4rem; animation: float-symbol 20s infinite ease-in-out 3s;">∞</span>
+        <span class="symbol" style="bottom: 10%; left: 40%; font-size: 9rem; opacity: 0.1; animation: float-symbol 25s infinite ease-in-out;">Ω</span>
+        <span class="symbol" style="top: 40%; left: 80%; font-size: 5rem; animation: float-symbol 14s infinite ease-in-out 5s;">√</span>
+        <span class="symbol" style="top: 85%; right: 5%; font-size: 4rem; animation: float-symbol 16s infinite ease-in-out 4s;">∆</span>
+        <span class="symbol" style="top: 5%; right: 30%; font-size: 3rem; animation: float-symbol 10s infinite ease-in-out 6s;">λ</span>
+        <span class="symbol" style="bottom: 30%; left: 5%; font-size: 5rem; animation: float-symbol 22s infinite ease-in-out 1s;">≈</span>
+    </div>
+
+    <!-- TECH DESIGN LAYER (HUD) -->
+    <div class="tech-design-layer">
+        <!-- Corners -->
+        <svg class="tech-corner corner-tl" viewBox="0 0 100 100">
+            <path d="M0 40 L0 0 L40 0" fill="none" />
+            <path d="M10 40 L10 10 L40 10" fill="none" stroke-width="1" opacity="0.5"/>
+            <rect x="0" y="0" width="5" height="5" fill="currentColor"/>
+        </svg>
+        <svg class="tech-corner corner-tr" viewBox="0 0 100 100">
+            <path d="M0 40 L0 0 L40 0" fill="none" />
+            <path d="M10 40 L10 10 L40 10" fill="none" stroke-width="1" opacity="0.5"/>
+            <rect x="0" y="0" width="5" height="5" fill="currentColor"/>
+        </svg>
+        <svg class="tech-corner corner-bl" viewBox="0 0 100 100">
+            <path d="M0 40 L0 0 L40 0" fill="none" />
+            <path d="M10 40 L10 10 L40 10" fill="none" stroke-width="1" opacity="0.5"/>
+            <rect x="0" y="0" width="5" height="5" fill="currentColor"/>
+        </svg>
+        <svg class="tech-corner corner-br" viewBox="0 0 100 100">
+            <path d="M0 40 L0 0 L40 0" fill="none" />
+            <path d="M10 40 L10 10 L40 10" fill="none" stroke-width="1" opacity="0.5"/>
+            <rect x="0" y="0" width="5" height="5" fill="currentColor"/>
+        </svg>
+
+        <!-- Rotating Compass / Astrolabe -->
+        <svg class="tech-compass" viewBox="0 0 600 600">
+            <circle cx="300" cy="300" r="280" fill="none" stroke="currentColor" stroke-width="1" opacity="0.3" stroke-dasharray="10 10"/>
+            <circle cx="300" cy="300" r="250" fill="none" stroke="currentColor" stroke-width="2" opacity="0.2"/>
+            <circle cx="300" cy="300" r="150" fill="none" stroke="currentColor" stroke-width="1" opacity="0.1"/>
+            <path d="M300 20 L300 580 M20 300 L580 300" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+            <g transform="rotate(45 300 300)">
+                <rect x="298" y="50" width="4" height="500" fill="currentColor" opacity="0.1"/>
+                <rect x="50" y="298" width="500" height="4" fill="currentColor" opacity="0.1"/>
+            </g>
+        </svg>
+
+        <!-- Crosshairs distributed -->
+        <div class="crosshair" style="top: 20%; left: 20%;"></div>
+        <div class="crosshair" style="top: 20%; right: 20%;"></div>
+        <div class="crosshair" style="bottom: 20%; left: 20%;"></div>
+        <div class="crosshair" style="bottom: 20%; right: 20%;"></div>
+        <div class="crosshair" style="top: 50%; left: 10%;"></div>
+        <div class="crosshair" style="top: 50%; right: 10%;"></div>
+    </div>
+
+    <div class="grid-overlay"></div>
+    <canvas id="particle-canvas"></canvas>
+    <div class="noise-overlay"></div>
+    <div id="root"></div>
+    <script>
+        // Particle Animation Script
+        (function() {
+            const canvas = document.getElementById('particle-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            // INCREASED COUNT AGAIN
+            const particleCount = Math.min(200, Math.floor(window.innerWidth / 6)); 
+            const connectionDistance = 250; 
+            const mouseDistance = 300;
+            
+            let w, h;
+            let mouse = { x: null, y: null };
+
+            function resize() {
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = window.innerHeight;
+                init(); 
+            }
+            
+            window.addEventListener('resize', resize);
+
+            window.addEventListener('mousemove', (e) => {
+                mouse.x = e.x;
+                mouse.y = e.y;
+            });
+            
+            window.addEventListener('mouseleave', () => {
+                mouse.x = null;
+                mouse.y = null;
+            });
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * w;
+                    this.y = Math.random() * h;
+                    this.vx = (Math.random() - 0.5) * 0.8; // Faster movement
+                    this.vy = (Math.random() - 0.5) * 0.8;
+                    this.size = Math.random() * 3 + 2; // Larger particles
+                    this.baseAlpha = Math.random() * 0.5 + 0.5; // MUCH higher alpha (0.5 - 1.0)
+                }
+                
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    // Bounce off edges
+                    if (this.x < 0 || this.x > w) this.vx *= -1;
+                    if (this.y < 0 || this.y > h) this.vy *= -1;
+
+                    // Mouse interaction
+                    if (mouse.x != null) {
+                         let dx = mouse.x - this.x;
+                         let dy = mouse.y - this.y;
+                         let distance = Math.sqrt(dx*dx + dy*dy);
+                         if (distance < mouseDistance) {
+                             const forceDirectionX = dx / distance;
+                             const forceDirectionY = dy / distance;
+                             const force = (mouseDistance - distance) / mouseDistance;
+                             
+                             this.x -= forceDirectionX * force * 2; 
+                             this.y -= forceDirectionY * force * 2;
+                         }
+                    }
+                }
+
+                draw() {
+                    // BRIGHT CYAN COLOR
+                    ctx.fillStyle = `rgba(100, 255, 255, ${this.baseAlpha})`;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.closePath();
+                    ctx.fill();
+                }
+            }
+
+            function init() {
+                particles = [];
+                const count = Math.min(250, Math.floor(w / 6)); // Very dense
+                for (let i = 0; i < count; i++) {
+                    particles.push(new Particle());
+                }
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, w, h);
+                
+                for (let i = 0; i < particles.length; i++) {
+                    let p = particles[i];
+                    p.update();
+                    p.draw();
+
+                    // Draw connections
+                    for (let j = i; j < particles.length; j++) {
+                        let p2 = particles[j];
+                        let dx = p.x - p2.x;
+                        let dy = p.y - p2.y;
+                        let distance = Math.sqrt(dx*dx + dy*dy);
+
+                        if (distance < connectionDistance) {
+                            ctx.beginPath();
+                            let opacity = 1 - (distance / connectionDistance);
+                            // HIGH VISIBILITY LINES
+                            ctx.strokeStyle = `rgba(100, 200, 255, ${opacity * 0.6})`; 
+                            ctx.lineWidth = 1.5; // Thicker lines
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+                requestAnimationFrame(animate);
+            }
+
+            resize();
+            animate();
+        })();
+    </script>
+  </body>
+</html>
